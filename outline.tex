@@ -1,0 +1,112 @@
+\documentclass[12pt]{article}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{color}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{natbib}
+\usepackage[margin=0.75in]{geometry}
+\usepackage[singlespacing]{setspace}
+\usepackage[bottom]{footmisc}
+\usepackage{floatrow}
+\usepackage{float,graphicx}
+\usepackage{enumerate}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{assumption}{Assumption}
+
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+
+
+\newcommand{\todo}[1]{{\color{red}{TO DO: \sc #1}}}
+
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\rationals}{\mathbb{Q}}
+
+\newcommand{\ind}{\mathbb{I}} % Indicator function
+\newcommand{\pr}{\mathbb{P}} % Generic probability
+\newcommand{\ex}{\mathbb{E}} % Generic expectation
+\newcommand{\var}{\textrm{Var}}
+\newcommand{\cov}{\textrm{Cov}}
+
+\newcommand{\normal}{N} % for normal distribution 
+\newcommand{\eps}{\varepsilon}
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+\newcommand{\argmax}{\textrm{argmax}}
+\newcommand{\argmin}{\textrm{argmin}}
+
+\title{Notes: Multivariate Paired Permutation Tests}
+\author{Kellie Ottoboni}
+\date{\today}
+\begin{document}
+\maketitle
+
+%\newpage
+
+%\begin{abstract}
+
+
+%\end{abstract}
+
+%\newpage
+
+
+\section{Ordered variables}
+\begin{itemize}
+\item Suppose that we have two paired samples and binary outcomes, and we wish to test whether the frequency of outcomes is the same in the two samples.
+For example, we may be interested in whether the incidence of heart disease decreased after a cohort took some treatment.
+The McNemar test accomplishes this.
+We observe $N$ pairs.
+The data may be written in a $2 \times 2$ contingency table, of the form
+
+\begin{table}[h]
+\begin{tabular}{|l|c|c|}
+\hline
+ & Sample 1 + & Sample 1 - \\
+ \hline
+ Sample 2 + & a & b \\
+ \hline 
+ Sample 2 - & c & d \\
+ \hline
+\end{tabular}
+\end{table}
+where ``+'' and ``-'' denote the binary outcomes in each sample,
+$a$ of the observations have ``+'' outcome in both samples,
+$b$ of the observations have ``+'' outcome in sample 1 and ``-'' in sample 2, and so forth,
+with $a + b + c + d = N$. \\
+
+Let $(X_{i1}, X_{i2})$ denote the $i$th pair of outcomes coming from sample 1 and sample 2, respectively.
+McNemar tests
+
+\begin{align*}
+H_0&: \pr(X_{\cdot 1} = x) =  \pr(X_{\cdot 2} = x), x = 1, 2 \\
+H_1&: \pr(X_{\cdot 1}  = x) \neq  \pr(X_{\cdot 2}  = x), \text{for some } x = 1, 2 
+\end{align*}
+
+The null further implies that $\pr(X_{\cdot 1} = x \mid X_{\cdot 2} = y) = \pr(X_{\cdot 2} = x \mid X_{\cdot 1} = y)$
+Therefore, $\pr((X_{i1}, X_{i2}) = (x, y)) = \pr((X_{i1}, X_{i2}) = (y, x))$ for all $(x, y) \in \{ +, - \}^2$.
+This means that within pairs, observations are exchangeable.
+
+
+The test statistic is
+
+$$\frac{(b-c)^2}{b+c}$$
+To obtain the permutation distribution of the test statistic, we randomly exchange the order of observations within pairs, with probability $1/2$, then count the numbers $b^*$ and $c^*$ in the permuted data.
+\item 
+\end{itemize}
+\section{Missing data}
+\begin{itemize}
+\item informative censoring
+\item non-informative censoring
+\item exact?
+\end{itemize}
+
+%\bibliographystyle{plainnat}
+%\bibliography{refs}
+
+
+\end{document}
