@@ -38,6 +38,8 @@
 \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
 \newcommand{\argmax}{\textrm{argmax}}
 \newcommand{\argmin}{\textrm{argmin}}
+\newcommand{\eqd}{\stackrel{d}{=}} % equal in distribution/law/measure
+
 
 \title{Notes: Multivariate Paired Permutation Tests}
 \author{Kellie Ottoboni}
@@ -56,8 +58,8 @@
 
 
 \section{Ordered variables}
-\begin{itemize}
-\item Suppose that we have two paired samples and binary outcomes, and we wish to test whether the frequency of outcomes is the same in the two samples.
+\subsection{Binary paired outcomes}
+Suppose that we have two paired samples and binary outcomes, and we wish to test whether the frequency of outcomes is the same in the two samples.
 For example, we may be interested in whether the incidence of heart disease decreased after a cohort took some treatment.
 The McNemar test accomplishes this.
 We observe $N$ pairs.
@@ -95,9 +97,80 @@ This means that within pairs, observations are exchangeable.
 The test statistic is
 
 $$\frac{(b-c)^2}{b+c}$$
+Notice that the statistic doesn't depend on the row totals or $a$ and $d$.
 To obtain the permutation distribution of the test statistic, we randomly exchange the order of observations within pairs, with probability $1/2$, then count the numbers $b^*$ and $c^*$ in the permuted data.
-\item 
+This is equivalent to doing a binomial test.
+
+\subsection{Ordered Paired Outcomes}
+The extension of McNemar's test to multiple outcomes is presented in Pesarin and Salmaso (2010), p. 87--88.
+Suppose that $X_{ij} \in \{1, 2, \dots, M\}$ for $j=1, 2$ and we observe pairs $(X_{i1}, X_{i2}), i=1,\dots,N$ as before.
+We can construct the same frequency table as above, except now it will have dimension $M \times M$ and elements $a_{k\ell} \equiv \sum_{i=1}^N \ind{(X_{i1} = k, X_{i2} = \ell)}$.
+
+There are several null hypotheses of interest:
+\begin{itemize}
+\item symmetry: if we define a suitable difference function $\phi(\cdot, \cdot)$, then we may wish to test whether $\phi(X_{i1}, X_{i2})$ is symmetric around 0.
+This requires us to define an ordering on the space of differences;
+then, we have a sort of binomial argument that conditional on the differences, they may take either sign with equal probability.
+\todo{flesh out}
+\item marginal equality: under the null hypothesis that $X_1 \eqd X_2$, we have $\pr(X_{i1} = k) = \pr(X_{i2} = k)$ for $i = 1, \dots, N$ and $k = 1, \dots, M$.
+Under this null, conditional on the observed data, $\pr( (X_{i1}, X_{i2})) = \pr((X_{i2}, X_{i1}))$ for $i=1,\dots, N$.
+Therefore, we can permute the order of observations within pairs to calibrate the null distribution of any test statistic.
+We may want to use a sum of McNemar-like statistics:
+$$T = \sum_{k > \ell} \frac{(a_{k \ell} - a_{\ell k})^2}{a_{k \ell} + a_{\ell k}}$$
+
+or a sum of scaled binomials:
+
+$$T = \sum_{k > \ell} \frac{ a_{k \ell} - \nu_{k \ell}}{\sqrt{\nu_{k \ell}/4}}$$
+where $\nu_{k \ell} = \frac{a_{k \ell} + a_{\ell k}}{2}$ is fixed over permutations.
+The permutation statistic, $T^*$, is obtained by replacing the $a_{k \ell}$ and $a_{\ell k}$ by $a_{k \ell}^*$ and $a_{\ell k}^*$, which are computed after permuting within pairs.
+\item \todo{test statistic from Stuart (1955) paper}
 \end{itemize}
+
+
+\subsection{Multiple Binary Paired Outcomes}
+The extension of McNemar's test from a single measurement to multiple measurements is presented in Pesarin and Salmaso, p. 289--292.
+Now instead of observing pairs of univariate observations $(X_{i1}, X_{i2})$, we observe $K$-vectors $(\mathbf{X}_{i1}, \mathbf{X}_{i2})$ with
+$\mathbf{X}_{ij} = (X_{ij1}, \dots, X_{ijK})$ for $j=1,2$.
+The idea is to test 
+
+$$H_0: \mathbf{X}_{i1} \eqd \mathbf{X}_{i2}$$
+or equivalently
+$$H_0: \bigcap_{k=1}^K (X_{i1k} \eqd X_{i2k}).$$
+
+This reduces to $K$ univariate problems, as above.
+We may conduct a partial test on each of the $K$ components of the outcome and combine them with NPC.
+\subsection{Multiple Ordered Paired Outcomes}
+The extension to multiple ordered outcomes is presented in Pesarin and Salmaso, p. 292--293.  
+As in the previous section, we observe pairs of $K$-vectors $(\mathbf{X}_{i1}, \mathbf{X}_{i2})$ with $\mathbf{X}_{ij} = (X_{ij1}, \dots, X_{ijK})$ for $j=1,2$.
+Essentially, we combine the ideas behind the test for ordered paired outcomes and the test for multiple binary paired outcomes.
+
+Consider the $k$th component of $\mathbf{X}_{\cdot}$, and suppose that it has $V_k$ possible values.
+We may define a suitable difference function $\phi(\cdot, \cdot)$ and test for symmetry of $\phi(X_{i1k}, X_{i2k})$ around zero using the procedure described above.
+Alternatively, we can test the null hypothesis $X_{\cdot 1 k} \eqd X_{\cdot 2k}$ using the procedure from the previous section.
+Either way, we will compute a statistic $T_k$ on the $k$th component.
+
+This defines a partial test on each of the $k$ components of the vectors $\mathbf{X}_{\cdot}$.
+NPC gives a test of the global null hypothesis $\cap_{k=1}^K H_{0k}$ against the global alternative $\cup_{k=1}^K H_{1k}$,
+where the null and alternative hypotheses may be specified as desired for each component.
+Without loss of generality, assume that we wish to test one-sided alternatives, with the convention that large test statistics are more extreme.
+The procedure is as follows:
+\begin{enumerate}
+\item Compute statistics $T_1, \dots, T_K$ on the observed dataset.
+\item Repeat, for $b = 1, \dots, B$:
+\begin{enumerate}
+\item Randomly swap the order of $(\mathbf{X}_{i1}, \mathbf{X}_{i2})$ with probability $1/2$ within pairs, independently across observations $i$, 
+to get new data $\{ (\mathbf{X}_{i1}^{b*}, \mathbf{X}_{i2}^{b*}) \}_{i=1}^N$.
+\item Compute test statistics $T_1^{b*}, \dots, T_K^{b*}$ from the permuted data.
+\end{enumerate}
+\item Compute the empirical p-values for the observed partial tests: $p_k = \frac{1}{B}\sum_{d=1}^B \ind{(T_k \geq T_k^{d*})}, k = 1, \dots, K$.
+Apply a suitable combining function $\Phi$ to obtain an overall test statistic $\mathbf{T} = \Phi(p_1, \dots, p_K)$.
+\item Compute p-values for each permuted partial test statistic $p_{k}^{b*} = \frac{1}{B}\sum_{d=1}^B \ind{(T_k^{b*} \geq T_k^{d*})}, k = 1, \dots, K$ and combine them as $\mathbf{T}^{b*} = \Phi(p_1^{b*}, \dots, p_K^{b*})$, for $b = 1, \dots, B$.
+\item The overall p-value of the test is $\mathbf{P} = \frac{1}{B} \sum_{b=1}^B \ind{(\mathbf{T} \geq \mathbf{T}^{b*})}$.
+\end{enumerate}
+
+
+
+
 \section{Missing data}
 \begin{itemize}
 \item informative censoring
