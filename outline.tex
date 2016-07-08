@@ -126,6 +126,7 @@ The permutation statistic, $T^*$, is obtained by replacing the $a_{k \ell}$ and 
 \item \todo{test statistic from \citet{stuart_test_1955}}
 \end{itemize}
 
+\todo{show unbiased and consistent}
 
 \subsection{Multiple Binary Paired Outcomes}
 The extension of McNemar's test from a single measurement to multiple measurements is presented in \citet{pesarin_permutation_2010}, p. 289--292.
@@ -139,6 +140,7 @@ $$H_0: \bigcap_{k=1}^K (X_{i1k} \eqd X_{i2k}).$$
 
 This reduces to $K$ univariate problems, as above.
 We may conduct a partial test on each of the $K$ components of the outcome and combine them with NPC.
+
 \subsection{Multiple Ordered Paired Outcomes}
 The extension to multiple ordered outcomes is presented in \citet{pesarin_permutation_2010}, p. 292--293.  
 As in the previous section, we observe pairs of $K$-vectors $(\mathbf{X}_{i1}, \mathbf{X}_{i2})$ with $\mathbf{X}_{ij} = (X_{ij1}, \dots, X_{ijK})$ for $j=1,2$.
@@ -168,14 +170,15 @@ Apply a suitable combining function $\Phi$ to obtain an overall test statistic $
 \item The overall p-value of the test is $\mathbf{P} = \frac{1}{B} \sum_{b=1}^B \ind{(\mathbf{T} \geq \mathbf{T}^{b*})}$.
 \end{enumerate}
 
+\todo{If each partial test of $H_{0k}$ against $H_{1k}$ is unbiased and consistent for $k=1,\dots, K$, then the global test is also unbiased and consistent.}
 
 
 
 \section{Missing data}
 \begin{itemize}
 \item informative censoring
-\item non-informative censoring
-\item exact?
+\item non-informative censoring as a special case
+\item exact results vs approximate results (see \citet{bertacche_treatments_1997})
 \end{itemize}
 
 \bibliographystyle{plainnat}
