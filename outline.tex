@@ -141,7 +141,7 @@ $$H_0: \bigcap_{k=1}^K (X_{i1k} \eqd X_{i2k}).$$
 This reduces to $K$ univariate problems, as above.
 We may conduct a partial test on each of the $K$ components of the outcome and combine them with NPC.
 
-\subsection{Multiple Ordered Paired Outcomes}
+\subsection{Multiple Ordered Paired Outcomes}\label{subsec:multiple_ordered_paired}
 The extension to multiple ordered outcomes is presented in \citet{pesarin_permutation_2010}, p. 292--293.  
 As in the previous section, we observe pairs of $K$-vectors $(\mathbf{X}_{i1}, \mathbf{X}_{i2})$ with $\mathbf{X}_{ij} = (X_{ij1}, \dots, X_{ijK})$ for $j=1,2$.
 Essentially, we combine the ideas behind the test for ordered paired outcomes and the test for multiple binary paired outcomes.
@@ -175,11 +175,49 @@ Apply a suitable combining function $\Phi$ to obtain an overall test statistic $
 
 
 \section{Missing data}
-\begin{itemize}
-\item informative censoring
-\item non-informative censoring as a special case
-\item exact results vs approximate results (see \citet{bertacche_treatments_1997})
-\end{itemize}
+\subsection{Problem Set-up}
+Suppose, as in Section~\ref{subsec:multiple_ordered_paired}, we observe pairs of $K$-vectors $(\mathbf{X}_{i1}, \mathbf{X}_{i2})$ with $\mathbf{X}_{ij} = (X_{ij1}, \dots, X_{ijK})$ for $j=1,2$.
+Now, some of the data are missing.
+For each individual, define the inclusion indicators $(\mathbf{O}_{i1}, \mathbf{O}_{i2})$ with $O_{ijk} = \ind{(X_{ink} \text{ is observed})}$, for $i = 1,\dots,N$, $j = 1,2$, and $k = 1,\dots, K$.
+That is, $O_{ijk}$ equals $1$ if the outcome is measured for variable $k$ in sample $j$ for individual $i$ and equals $0$ if the measurement is missing.
+Hence, the complete set of observed data is represented by $\{(\mathbf{X}_{i1}, \mathbf{X}_{i2}, \mathbf{O}_{i1}, \mathbf{O}_{i2})\}_{i=1}^N$.
+
+Assume that we are interested in testing for effects in the $K$ components.
+The null hypothesis is that there is no difference between the samples due to treatment.
+Then, we must not only test for differences in $\mathbf{X}$, but also in $\mathbf{O}$.
+The null hypothesis can be expressed
+
+$$H_0: \{ (\mathbf{X}_1, \mathbf{O}_1) \eqd (\mathbf{X}_2, \mathbf{O}_2) \}$$
+against the alternative hypothesis $H_1: \{H_0 \text{ is not true}\}$.
+We may rewrite the null hypothesis as
+
+\begin{align*}
+H_0 &: \left\lbrace \left( \mathbf{O}_1 \eqd \mathbf{O}_2 \right) \bigcap  \left[ \left( \mathbf{X}_1 \eqd \mathbf{X}_2 \right) \big\vert (\mathbf{O}_1, \mathbf{O}_2) \right]\right\rbrace \\
+&= \left\lbrace \left[ \bigcap_{k=1}^K \left(O_{\cdot 1k} \eqd O_{\cdot 2 k} \right) \right] \bigcap \left[ \bigcap_{k=1}^K \left( X_{\cdot 1k} \eqd X_{\cdot 2k}  \big\vert (\mathbf{O}_1, \mathbf{O}_2) \right)\right]\right\rbrace
+\end{align*}
+
+\subsection{Missing Completely at Random}
+Data is said to be missing at random (MAR) if the missingness pattern does not depend on the unobserved values, conditional on the observed data.
+Similarly, data is said to be observed at random if the missingness pattern does not depend on the observed values, conditional on the unobserved data.
+Data is missing completely at random (MCAR) if the data are both missing at random and observed at random (\cite{rubin_inference_1976}).
+This is a special case of a missing data process.
+
+
+In MCAR data, the observed values may be considered a random subset of the complete data set.
+The missingness pattern does not vary by sample, by definition, which implies that $\mathbf{O}_1 \eqd \mathbf{O}_2$.
+Thus, we may omit testing for differences in the pattern of missingness, but we must still condition on it when testing for differences in measurements.
+The test reduces to
+
+\begin{align*}
+H_0 &: \left\lbrace \left( \mathbf{X}_1 \eqd \mathbf{X}_2 \right) \big\vert (\mathbf{O}_1, \mathbf{O}_2) \right\rbrace \\
+&= \left\lbrace \bigcap_{k=1}^K \left( X_{\cdot 1k} \eqd X_{\cdot 2k}  \big\vert (\mathbf{O}_1, \mathbf{O}_2) \right)\right\rbrace
+\end{align*}
+against the alternative hypothesis $H_1: \{H_0 \text{ is not true}\}$.
+
+\subsection{MNAR or MCAR?}
+
+\subsection{Exact tests}
+\todo{exact results vs approximate results (see \citet{bertacche_treatments_1997})}
 
 \bibliographystyle{plainnat}
 \bibliography{references}
